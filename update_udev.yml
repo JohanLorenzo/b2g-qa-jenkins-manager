@@ -1,0 +1,22 @@
+---
+- hosts: slave-nodes
+  remote_user: webqa
+  sudo: yes
+
+  vars_files:
+    - ./vars/credentials.yml
+    - ./vars/udev.yml
+  tasks:
+  - name: udev rules are present
+    lineinfile: dest="{{ udev_file }}" state=present create=yes line="SUBSYSTEM==\"usb\", ATTR{idVendor}==\"{{ item.vendor_id }}\", MODE=\"{{ udev_mode }}\", GROUP=\"{{ udev_group }}\""
+    with_items: vendors
+    notify:
+    - restart udev
+
+  - name: udev rules are commented
+    lineinfile: dest="{{ udev_file }}" state=present line="# {{ item.comment }}" insertbefore=".+\"{{ item.vendor_id }}\".+"
+    with_items: vendors
+
+  handlers:
+    - name: restart udev
+      service: name=udev state=restarted

@@ -1,0 +1,14 @@
+---
+udev_file: /etc/udev/rules.d/51-android.rules
+udev_group: plugdev
+udev_mode: "0666"
+
+vendors:
+  - vendor_id: 19d2
+    comment: Flame ADB
+  - vendor_id: 05c6
+    comment: Flame ADB
+  - vendor_id: 18d1
+    comment: Flame Fastboot
+  - vendor_id: 0fce
+    comment: Aries
